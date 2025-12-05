@@ -1,0 +1,83 @@
+Um campeonato amador de e-sports é uma competição de jogos eletrônicos voltada para jogadores que não são
+profissionais, ou seja, não recebem remuneração fixa pela prática do jogo, participando principalmente por lazer, socialização e
+espírito competitivo. No contexto deste trabalho, considere um campeonato amador de League of Legends (LoL), em que
+equipes se inscrevem para disputar partidas organizadas pela coordenação do evento. As equipes podem ser formadas por
+amigos, colegas de faculdade ou membros de comunidades online, com foco em diversão e integração entre os participantes.
+Sabendo disso, imagine que você foi contratado para desenvolver uma aplicação web para ajudar na organização de um
+campeonato amador de League of Legends, permitindo que equipes e seus jogadores sejam cadastrados. Para isso, desenvolva esse
+serviço conforme orientações a seguir.
+Desenvolva um sistema web para o controle de equipe x jogadores que atenda aos seguintes
+requisitos:
+Cadastro de equipe: Deve ser possível cadastrar as equipes (times), incluindo:
+• nome da equipe;
+• nome do capitão responsável pela equipe;
+• telefone ou contato (WhatsApp) do capitão responsável.
+Cadastro de jogador: Deve ser possível cadastrar até cinco jogadores em suas respectivas
+equipes, representando a formação padrão de uma equipe de LoL (top, jungle, mid, atirador e
+suporte).
+Login e logout: Deve ser possível fazer login e logout no sistema.
+Requisitos técnicos
+ O sistema deve ser desenvolvido utilizando as tecnologias Node.js, Express, cookies e sessão.
+ O sistema deve ser acessível a partir de qualquer dispositivo com acesso à internet.
+Entrega
+O trabalho deve ser entregue até o dia 10 de dezembro de 2025.
+Observações
+ O trabalho deve ser desenvolvido individualmente.
+Comportamento do sistema:
+ O usuário somente poderá ter acesso ao menu do sistema depois de realizar o login.
+ O menu do sistema deverá apresentar as seguintes opções:
+o Cadastro de equipes (times);
+o Cadastro de jogadores;
+ Caso o usuário do sistema selecione a opção de “cadastro de equipe”, o sistema deverá exi
+bir um formulário de cadastro para permitir que uma equipe seja cadastrada. O formulário de
+cadastro deverá conter os seguintes campos:
+o nome da equipe
+o nome do capitão responsável;
+o telefone/WhatsApp do capitão responsável.
+Todos os campos são de preenchimento obrigatório, devendo a validação dos dados
+ocorrer no lado do servidor.
+Ao término de cada inclusão, o sistema deverá apresentar uma lista de equipes já
+cadastradas, possibilitando, a partir dessa tela, que o usuário volte para a tela de cadastro ou
+visualize novamente o menu do sistema.
+ Caso o usuário do sistema selecione a opção de “cadastro de jogadores”, o sistema deverá
+exibir um formulário de cadastro para permitir que um jogador seja cadastrado. O formulário
+de cadastro deverá conter os seguintes campos:
+o nome do jogador;
+o nickname in-game;
+o função (posição na equipe: top, jungle, mid, atirador, suporte);
+o elo (nível ranqueado do jogador, por exemplo: Ferro, Bronze, Prata, Ouro, Platina,
+etc.);
+o gênero (sexo);
+o equipe.
+ Todos os campos são de preenchimento obrigatório, devendo a validação dos dados ocorrer
+no lado do servidor.
+No formulário de cadastro do jogador, a equipe deverá ser selecionada a partir de
+uma caixa de seleção, a qual exibirá todas as equipes anteriormente já cadastradas. O
+usuário não poderá digitar o nome da equipe, apenas selecionar uma opção disponível na
+caixa de seleção.
+A caixa de seleção deverá ser renderizada no lado do servidor, adicionando uma
+opção para cada equipe cadastrada.
+Ao término de cada inclusão, o sistema deverá apresentar uma lista de jogadores,
+agrupados por equipe, possibilitando, a partir dessa tela, que o usuário volte para a tela de
+cadastro ou visualize novamente o menu do sistema.
+Outros requisitos do sistema
+ Na tela de menu do sistema, exiba a data e hora do último acesso do usuário do sistema utili
+zando cookies.
+ O login no sistema poderá ser implementado utilizando-se um único usuário e senha, confor
+me realizado nas aulas. Utilize o conceito de sessão para manter o login válido por 30 minutos.
+Critérios avaliativos
+ O app está acessível e funcionando na Internet (Vercel) (2,0 pontos);
+ Na tela de menu, é possível visualizar informações do último acesso? (2,0 pontos);
+ É possível realizar cadastro de equipe e jogadores (2,0 pontos);
+ Os dados de cadastro de equipes e jogadores foram validados pelo servidor? (2,0 pontos);
+ A página de cadastro de jogadores exibe corretamente uma caixa de seleção contendo todas
+as equipes já cadastradas (2,0 pontos).
+Para desenvolver essa aplicação você fará uso dos seguintes recursos/tecnologias:
+ Visual Studio Code;
+ Node.js + express + express-session + cookie-parser;
+ Github e Vercel.
+Orientações para entrega:
+Entregue, no link da atividade final no ambiente virtual de aprendizagem, o link para acesso
+da aplicação na internet, além do código fonte compactado.
+Caso tenha dificuldade em publicar a aplicação no Vercel, grave um vídeo apresentando sua
+aplicação e envie junto com seu código fonte.
