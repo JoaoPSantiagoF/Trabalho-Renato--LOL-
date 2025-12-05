@@ -11,8 +11,12 @@
     <form id="formulario" action="/login" method="post">
         <label for="nomeUsuario">Nome de Usuário:</label><br>
         <input type="text" id="nomeUsuario" name="nomeUsuario" placeholder="Digite o nome de usuario..."><br><br>
+        <invalid-feedback>Usuário Incorreto.</invalid-feedback>
+
         <label for="Senha">Senha:</label><br>
         <input type="password" id="Senha" name="senha" placeholder="Digite a sua senha..."><br><br>
+        <invalid-feedback>senha Incorreta.</invalid-feedback>
+        
         <input type="submit" value="Entrar">
     </form>
 </body>
