@@ -8,6 +8,9 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+// Servir arquivos da pasta public
+app.use(express.static(path.join(__dirname, "public")));
+
 app.use(
   session({
     secret: "segredo123",
@@ -17,11 +20,11 @@ app.use(
   })
 );
 
-//Banco de dados em memória
-let equipes = []; 
-let jogadores = []; 
+// Banco em memória
+let equipes = [];
+let jogadores = [];
 
-//Middlewares
+// Middleware de proteção
 function proteger(req, res, next) {
   if (!req.session.logado) {
     return res.redirect("/");
@@ -29,7 +32,7 @@ function proteger(req, res, next) {
   next();
 }
 
-//Tela de login
+// Tela de login
 app.get("/", (req, res) => {
   res.send(`
     <h2>Login do Sistema - Campeonato LoL</h2>
@@ -45,7 +48,7 @@ app.get("/", (req, res) => {
   `);
 });
 
-//Carregar login
+// Login
 app.post("/login", (req, res) => {
   const { usuario, senha } = req.body;
 
@@ -53,11 +56,13 @@ app.post("/login", (req, res) => {
     req.session.logado = true;
     const agora = new Date().toLocaleString("pt-BR");
     res.cookie("ultimoAcesso", agora);
-    res.redirect("/menu");
+    return res.redirect("/menu");
   }
+
+  res.send(`<h3>Login inválido!</h3><a href='/'>Voltar</a>`);
 });
 
-//Menu principal
+// Menu
 app.get("/menu", proteger, (req, res) => {
   const ultimo = req.cookies.ultimoAcesso || "Primeiro acesso";
 
@@ -71,7 +76,7 @@ app.get("/menu", proteger, (req, res) => {
   `);
 });
 
-//Cadastro de equipe
+// Cadastro de equipe
 app.get("/cadastro-equipe", proteger, (req, res) => {
   res.send(`
     <style>
@@ -95,18 +100,21 @@ app.get("/cadastro-equipe", proteger, (req, res) => {
     </style>
 
     <h2>Cadastrar Equipe</h2>
-    <form method="POST" action="/cadastro-equipe">
+
+    <form id="formEquipe" method="POST" action="/cadastro-equipe">
       <label>Nome da equipe:</label><br>
-      <input type="text" name="nome"><br><br>
+      <input type="text" id="nomeEquipe" name="nome"><br><br>
 
       <label>Nome do capitão:</label><br>
-      <input type="text" name="capitao"><br><br>
+      <input type="text" id="capitao" name="capitao"><br><br>
 
       <label>Telefone/WhatsApp:</label><br>
-      <input type="text" name="contato"><br><br>
+      <input type="text" id="contato" name="contato"><br><br>
 
       <button type="submit">Cadastrar</button>
     </form>
+
+    <script src="/validacao.js"></script>
 
     <hr>
     <h3>Equipes cadastradas</h3>
@@ -139,44 +147,40 @@ app.get("/cadastro-equipe", proteger, (req, res) => {
       }
     </table>
 
-    <br><a href="/menu">Voltar ao menu</a>
+    <br><button onclick="location.href='/menu'">Voltar ao menu</button>
   `);
 });
 
-//Carregar formulário de equipe
+// Receber equipe (SEM validação)
 app.post("/cadastro-equipe", proteger, (req, res) => {
   const { nome, capitao, contato } = req.body;
-
-  if (!nome || !capitao || !contato) {
-    return res.send("<h3>Preencha todos os campos!</h3><a href='/cadastro-equipe'>Voltar</a>");
-  }
 
   equipes.push({ nome, capitao, contato });
 
   res.redirect("/cadastro-equipe");
 });
 
-//Cadastro de jogador
+// Cadastro de jogador
 app.get("/cadastro-jogador", proteger, (req, res) => {
   if (equipes.length === 0) {
     return res.send(`
       <h3>Cadastre ao menos uma equipe antes de cadastrar jogadores.</h3>
-      <a href="/menu">Voltar ao menu</a>
+      <button onclick="location.href='/menu'">Voltar ao menu</button>
     `);
   }
 
   res.send(`
     <h2>Cadastrar Jogador</h2>
 
-    <form method="POST" action="/cadastro-jogador">
+    <form id="formJogador" method="POST" action="/cadastro-jogador">
       <label>Nome do jogador:</label><br>
-      <input type="text" name="nomeJogador"><br><br>
+      <input type="text" id="nomeJogador" name="nomeJogador"><br><br>
 
       <label>Nickname:</label><br>
-      <input type="text" name="nick"><br><br>
+      <input type="text" id="nick" name="nick"><br><br>
 
       <label>Função:</label><br>
-      <select name="funcao">
+      <select id="funcao" name="funcao">
         <option value="">Selecione</option>
         <option value="top">Top</option>
         <option value="jungle">Jungle</option>
@@ -186,48 +190,45 @@ app.get("/cadastro-jogador", proteger, (req, res) => {
       </select><br><br>
 
       <label>Elo:</label><br>
-      <input type="text" name="elo"><br><br>
+      <input type="text" id="elo" name="elo"><br><br>
 
       <label>Gênero:</label><br>
-      <select name="genero">
+      <select id="genero" name="genero">
         <option value="">Selecione</option>
         <option value="Masculino">Masculino</option>
         <option value="Feminino">Feminino</option>
         <option value="Outro">Outro</option>
       </select><br><br>
-      
 
       <label>Equipe:</label><br>
-      <select name="equipe">
+      <select id="equipe" name="equipe">
         ${equipes.map(e => `<option value="${e.nome}">${e.nome}</option>`).join("")}
       </select><br><br>
 
       <button type="submit">Cadastrar</button>
     </form>
 
+    <script src="/validacao.js"></script>
+
     <hr>
     <h3>Jogadores cadastrados</h3>
 
     ${agrupaJogadoresPorEquipe()}
 
-    <br><a href="/menu">Voltar ao menu</a>
+    <br><button onclick="location.href='/menu'">Voltar ao menu</button>
   `);
 });
 
-//Carregar formulário de jogador
+// Receber jogador (SEM validação)
 app.post("/cadastro-jogador", proteger, (req, res) => {
   const { nomeJogador, nick, funcao, elo, genero, equipe } = req.body;
-
-  if (!nomeJogador || !nick || !funcao || !elo || !genero || !equipe) {
-    return res.send("<h3>Preencha todos os campos!</h3><a href='/cadastro-jogador'>Voltar</a>");
-  }
 
   jogadores.push({ nomeJogador, nick, funcao, elo, genero, equipe });
 
   res.redirect("/cadastro-jogador");
 });
 
-//Agrupar jogadores por equipe
+// Agrupar jogadores por equipe
 function agrupaJogadoresPorEquipe() {
   let html = "";
 
@@ -272,13 +273,13 @@ function agrupaJogadoresPorEquipe() {
   return html;
 }
 
-//Logout
+// Logout
 app.get("/logout", (req, res) => {
   req.session.destroy();
   res.redirect("/");
 });
 
-//Porta
+// Porta
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log("Servidor rodando na porta " + port);
